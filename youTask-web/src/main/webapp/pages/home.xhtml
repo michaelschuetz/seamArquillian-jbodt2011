@@ -1,0 +1,79 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/WEB-INF/layout/main-template.xhtml">
+
+    <ui:define name="content">
+        <h:form>
+            <h:panelGroup layout="block">
+
+                <h:panelGroup layout="block" style="padding-bottom:20px;">
+
+                    <h:outputText value="#{messages['com.acme.youTask.home.kategorieFileter.filter']}: "/>
+
+                    <h:selectOneMenu id="type" value="#{aufgabeController.kategorieFilter}"
+                                     valueChangeListener="#{aufgabeController.filterChanged}">
+                        <f:selectItem itemValue="#{null}"
+                                      itemLabel="#{messages['com.acme.youTask.home.kategorieFileter.noSelection']}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{kategorieFilterTypes}" var="_type"
+                                       itemValue="#{_type}"/>
+                        <a4j:ajax event="valueChange" render="dataTable" execute="@this"/>
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <rich:dataTable id="dataTable" var="task" value="#{aufgabeController.aufgaben}">
+
+                    <rich:column id="taskDoneColumn" width="150px">
+                        <f:facet name="header">
+                            <h:outputText
+                                    value="#{messages['com.acme.youTask.home.dataTable.header.done']}"/>
+                        </f:facet>
+                        <h:selectBooleanCheckbox value="#{task.erledigt}" disabled="true"/>
+                    </rich:column>
+
+                    <rich:column id="taskDescriptionColumn" width="150px">
+                        <f:facet name="header">
+                            <h:outputText
+                                    value="#{messages['com.acme.youTask.home.dataTable.header.description']}"/>
+                        </f:facet>
+                        <h:outputText value="#{task.bezeichnung}"/>
+                    </rich:column>
+
+                    <rich:column id="taskCategoryColumn" width="150px">
+                        <f:facet name="header">
+                            <h:outputText
+                                    value="#{messages['com.acme.youTask.home.dataTable.header.category']}"/>
+                        </f:facet>
+                        <h:outputText value="#{messages[task.kategorie.i18nDescriptionId]}"/>
+                    </rich:column>
+
+                </rich:dataTable>
+
+                <h:outputText value="#{messages['com.acme.youTask.home.create']}:" />
+
+                <h:panelGroup>
+                    <h:inputText label="#{messages['com.acme.youTask.home.description']}" value="#{aufgabeController.aufgabe.bezeichnung}"/>
+                    <h:selectOneMenu id="create_type" value="#{aufgabeController.aufgabe.kategorie}"
+                                     valueChangeListener="#{aufgabeController.filterChanged}">
+                        <f:selectItem itemValue="#{null}"
+                                      itemLabel="#{messages['com.acme.youTask.home.kategorieFileter.noSelection']}"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{kategorieFilterTypes}" var="_type"
+                                       itemValue="#{_type}"/>
+                    </h:selectOneMenu>
+                    <h:commandButton action="#{aufgabeController.saveAufgabe}"
+                                     value="#{messages['com.acme.youTask.home.create']}"/>
+                </h:panelGroup>
+
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,3 @@
+project.jboss.home=
+project.jboss.test.home=${project.jboss.home}
+maven.repo.local=
